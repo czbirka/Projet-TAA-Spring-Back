@@ -20,7 +20,7 @@ public class User {
 	private String nom;
 	private String prenom;
 	private String login;
-	private String motDePasse;
+	private  transient String motDePasse;
 	private String email;
 
 	private List<Activite> activites = new ArrayList<Activite>();
