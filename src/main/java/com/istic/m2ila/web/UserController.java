@@ -4,9 +4,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.logging.Logger;
 
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +25,7 @@ public class UserController {
 	@Autowired
 	private UserDAO userDao;
 
-	
+
     @RequestMapping(value = "", method = RequestMethod.GET, produces="application/json")
     @ResponseBody
     public ResponseEntity<List<User>> listAllUsers() {
@@ -127,64 +124,13 @@ public class UserController {
         for (int i=0; i<users.size(); i++) {
         	userDao.deleteById(users.get(i).getId());
         }
-        
-        //userDao.deleteAll();
-        //ListIterator li = users.listIterator();
-
-
-        //while(li.hasNext())
-        	//userDao.deleteById(li.nex)
-        	
-          //System.out.println(li.next());
-    	
+   	
         return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
     }
 	
     
     
     
-    
-//    @RequestMapping(
-//    		value = "/deleteAll", 
-//    		method = RequestMethod.DELETE, 
-//    		produces="application/json", 
-//    		consumes="application/json")
-//    @ResponseBody
-//    public ResponseEntity<User> deleteAllUsers() {
-//    	userDao.deleteAllUsers();
-//        return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
-//    }
-	
-	
-//	@RequestMapping(value = "/", method = RequestMethod.GET)
-//    public List<User> get(){
-//        return userDao.findAll();
-//    }
-//	
-//    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-//    public User get(@PathVariable("id") long id){
-//        return userDao.findById(id);
-//    }
-//    
-//    @RequestMapping(method = RequestMethod.PUT)
-//    public User create(@RequestBody User user){
-//        return  userDao.save(user);
-//    }
-	
-//    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-//    public T update(@RequestBody T obj, @PathVariable("id") int id){
-//        return serv.save(obj);
-//    }
-    
-	
-	
-	//@GetMapping("/")
-//	@Transactional(readOnly = true)
-//	public ModelAndView index() {
-//		List<Note> notes = this.noteRepository.findAll();
-//		ModelAndView modelAndView = new ModelAndView("index");
-//		modelAndView.addObject("notes", notes);
-//		return modelAndView;
-//}
-	
+
+
 }
