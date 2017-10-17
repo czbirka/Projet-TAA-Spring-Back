@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.istic.m2ila.model.Lieu;
+import com.istic.m2ila.model.User;
 import com.istic.m2ila.service.LieuDAO;
 
 @RestController
@@ -21,7 +23,8 @@ public class LieuController {
 	@Autowired
 	private LieuDAO lieuDao;
 
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value = "", method = RequestMethod.GET, produces="application/json")
+    @ResponseBody
 	public ResponseEntity<List<Lieu>> listAllLieux() {
 		List<Lieu> lieux = lieuDao.findAll();
 		if (lieux.isEmpty()) {
@@ -29,20 +32,8 @@ public class LieuController {
 		}
 		return new ResponseEntity<List<Lieu>>(lieux, HttpStatus.OK);
 	}
-
-	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<?> createLieu(@RequestBody Lieu lieu) {
-		if (lieuDao.existsById(lieu.getId())) {
-			return new ResponseEntity("Unable to create. A Lieu with name " + lieu.getNom() + " already exist.",
-					HttpStatus.CONFLICT);
-		}
-		lieuDao.save(lieu);
-		return new ResponseEntity<Lieu>(lieu, HttpStatus.CREATED);
-	}
-
-	// Path : /region/:id
-
-	@RequestMapping(value = "{id}", method = RequestMethod.GET)
+	
+	@RequestMapping(value = "{id}", method = RequestMethod.GET, produces="application/json")
 	public ResponseEntity<?> getLieu(@PathVariable("id") long id) {
 		Lieu lieu = lieuDao.findById(id);
 		if (lieu == null) {
@@ -50,6 +41,32 @@ public class LieuController {
 		}
 		return new ResponseEntity<Lieu>(lieu, HttpStatus.OK);
 	}
+
+	@RequestMapping(
+    		value = "", 
+    		method = RequestMethod.POST, 
+    		produces="application/json", 
+    		consumes="application/json")
+    @ResponseBody
+	public ResponseEntity<?> createLieu(@RequestBody Lieu lieu) {
+		if (lieuDao.findByNom(lieu.getNom()).size() != 0) {
+			return new ResponseEntity("Unable to create. A Lieu with name " + lieu.getNom() + " already exist.",
+					HttpStatus.CONFLICT);
+		}
+		lieuDao.save(lieu);
+		return new ResponseEntity<Lieu>(lieu, HttpStatus.CREATED);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateLieu(@PathVariable("id") long id, @RequestBody Lieu lieu) {
@@ -69,6 +86,22 @@ public class LieuController {
 		return new ResponseEntity<Lieu>(currentLieu, HttpStatus.OK);
 
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteLieu(@PathVariable("id") long id) {
