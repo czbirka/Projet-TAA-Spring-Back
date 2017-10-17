@@ -74,14 +74,6 @@ public class RegionController {
 		regionDao.save(currentRegion);
 		return new ResponseEntity<Region>(currentRegion, HttpStatus.OK);
 	}
-	
-
-	
-	
-	
-	
-	
-	
 
 	@RequestMapping(
 			value = "{id}", 
