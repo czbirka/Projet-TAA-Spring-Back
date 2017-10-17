@@ -37,9 +37,12 @@ public interface RegionDAO extends CrudRepository<Region, Long>  {
 	@Query("update Region r set r.nom = :nom where r.id = :id")
 	void setRegionInfoById(@Param("id") long id, @Param("nom") String nom);
 	
+//	@Transactional
+//    @Query("delete from Region r where r.id = :id")
+//	void deleteById(@Param("id") long id);
+	
 	@Transactional
-    @Query("delete from Region r where r.id = :id")
-	void deleteById(@Param("id") long id);
+    long deleteById(long id);
 	
 	@Transactional
     @Query("delete from Region r")

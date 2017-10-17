@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.istic.m2ila.model.Region;
+import com.istic.m2ila.model.User;
 import com.istic.m2ila.service.RegionDAO;
 
 @RestController
@@ -24,7 +25,10 @@ public class RegionController {
 
 	// Path : /region
 
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(
+			value = "", 
+			method = RequestMethod.GET, 
+			produces="application/json")
 	public ResponseEntity<List<Region>> listAllRegions() {
 		List<Region> regions = regionDao.findAll();
 		if (regions.isEmpty()) {
@@ -32,6 +36,19 @@ public class RegionController {
 		}
 		return new ResponseEntity<List<Region>>(regions, HttpStatus.OK);
 	}
+	
+	@RequestMapping(
+			value = "{id}", 
+			method = RequestMethod.GET, 
+			produces="application/json")
+	public ResponseEntity<?> getRegion(@PathVariable("id") long id) {
+		Region region = regionDao.findById(id);
+		if (region == null) {
+			return new ResponseEntity("Region with id " + id + " not found", HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<Region>(region, HttpStatus.OK);
+	}
+	
 	
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> createRegion(@RequestBody Region region) {
@@ -43,32 +60,34 @@ public class RegionController {
 		return new ResponseEntity<Region>(region, HttpStatus.CREATED);
 	}
 	
-	// Path : /region/:id
-
-	@RequestMapping(value = "{id}", method = RequestMethod.GET)
-	public ResponseEntity<?> getRegion(@PathVariable("id") long id) {
-		Region region = regionDao.findById(id);
-		if (region == null) {
-			return new ResponseEntity("Region with id " + id + " not found", HttpStatus.NOT_FOUND);
-		}
-		return new ResponseEntity<Region>(region, HttpStatus.OK);
-	}
-
-	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
+	@RequestMapping(
+			value = "{id}", 
+			method = RequestMethod.PUT, 
+    		produces="application/json", 
+    		consumes="application/json")
 	public ResponseEntity<?> updateRegion(@PathVariable("id") long id, @RequestBody Region region) {
-
 		Region currentRegion = regionDao.findById(id);
 		if (currentRegion == null) {
 			return new ResponseEntity("Unable to upate. Region with id " + id + " not found.", HttpStatus.NOT_FOUND);
 		}
-		currentRegion.setNom(region.getNom());
-		regionDao.setRegionInfoById(id, region.getNom());
+		if (region.getNom() != null) {currentRegion.setNom(region.getNom());}
+		regionDao.save(currentRegion);
 		return new ResponseEntity<Region>(currentRegion, HttpStatus.OK);
 	}
+	
 
-	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+	
+	
+	
+	
+	
+	
+
+	@RequestMapping(
+			value = "{id}", 
+			method = RequestMethod.DELETE, 
+			consumes="application/json")
 	public ResponseEntity<?> deleteRegion(@PathVariable("id") long id) {
-
 		Region region = regionDao.findById(id);
 		if (region == null) {
 			return new ResponseEntity("Unable to delete. Region with id " + id + " not found.", HttpStatus.NOT_FOUND);
@@ -76,6 +95,12 @@ public class RegionController {
 		regionDao.deleteById(id);
 		return new ResponseEntity(HttpStatus.NO_CONTENT);
 	}
+	
+	
+
+	
+	
+	
 	
 
 	// Path : /region/as/delete
