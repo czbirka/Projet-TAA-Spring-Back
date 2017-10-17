@@ -52,13 +52,14 @@ public class RegionController {
 	
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> createRegion(@RequestBody Region region) {
-		if (regionDao.existsById(region.getId())) {
+		if (regionDao.findByNom(region.getNom()).size() != 0) {
 			return new ResponseEntity("Unable to create. A Region with name " + region.getNom() + " already exist.",
 					HttpStatus.CONFLICT);
 		}
 		regionDao.save(region);
 		return new ResponseEntity<Region>(region, HttpStatus.CREATED);
 	}
+
 	
 	@RequestMapping(
 			value = "{id}", 

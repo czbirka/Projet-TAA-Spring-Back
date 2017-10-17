@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.istic.m2ila.model.Departement;
+import com.istic.m2ila.model.User;
 import com.istic.m2ila.service.DepartementDAO;
 
 @RestController
@@ -21,9 +23,11 @@ public class DepartementController {
 	@Autowired
 	private DepartementDAO departementDao;
 
-	// Path : departement
-	
-	@RequestMapping(method = RequestMethod.GET)
+	@ResponseBody
+	@RequestMapping(
+			value = "", 
+			method = RequestMethod.GET, 
+			produces="application/json")
 	public ResponseEntity<List<Departement>> listAllDepartements() {
 		List<Departement> departements = departementDao.findAll();
 		if (departements.isEmpty()) {
@@ -32,20 +36,11 @@ public class DepartementController {
 		return new ResponseEntity<List<Departement>>(departements, HttpStatus.OK);
 	}
 
-	
-	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<?> createDepartement(@RequestBody Departement departement) {
-		if (departementDao.existsById(departement.getId())) {
-			return new ResponseEntity("Unable to create. A User with name " + departement.getNom() + " already exist.",
-					HttpStatus.CONFLICT);
-		}
-		departementDao.save(departement);
-		return new ResponseEntity<Departement>(departement, HttpStatus.CREATED);
-	}
-	
-	// Path : departement/:id
-	
-	@RequestMapping(value = "{id}", method = RequestMethod.GET)
+	@ResponseBody
+	@RequestMapping(
+			value = "{id}", 
+			method = RequestMethod.GET, 
+			produces="application/json")
 	public ResponseEntity<?> getDepartement(@PathVariable("id") long id) {
 		Departement departement = departementDao.findById(id);
 		if (departement == null) {
@@ -53,38 +48,71 @@ public class DepartementController {
 		}
 		return new ResponseEntity<Departement>(departement, HttpStatus.OK);
 	}
-
-	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
+	
+	@RequestMapping(
+    		value = "", 
+    		method = RequestMethod.POST, 
+    		produces="application/json", 
+    		consumes="application/json")
+	@ResponseBody
+	public ResponseEntity<?> createDepartement(@RequestBody Departement departement) {
+		if (departementDao.findByNom(departement.getNom()).size() != 0) {
+			return new ResponseEntity("Unable to create. A User with name " + departement.getNom() +
+					" already exist.", HttpStatus.CONFLICT);
+		}
+		departementDao.save(departement);
+		return new ResponseEntity<Departement>(departement, HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(
+    		value = "/{id}", 
+    		method = RequestMethod.PUT, 
+    		produces="application/json", 
+    		consumes="application/json")
+    @ResponseBody
 	public ResponseEntity<?> updateDepartement(@PathVariable("id") long id, @RequestBody Departement departement) {
-
 		Departement currentDepartement = departementDao.findById(id);
-
 		if (currentDepartement == null) {
 			return new ResponseEntity("Unable to upate. Departement with id " + id + " not found.",
 					HttpStatus.NOT_FOUND);
 		}
-
-		currentDepartement.setNom(departement.getNom());
-		currentDepartement.setRegion(departement.getRegion());
-
-		departementDao.setDepartementInfoById(id, departement.getNom(), departement.getRegion());
+		if (departement.getNom() != null) {currentDepartement.setNom(departement.getNom());}
+		if (departement.getRegion() != null) {currentDepartement.setRegion(departement.getRegion());}
+		departementDao.save(currentDepartement);
 		return new ResponseEntity<Departement>(currentDepartement, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+	
+	
+	
+	
+	
+	@RequestMapping(
+    		value = "/{id}", 
+    		method = RequestMethod.DELETE, 
+    		consumes="application/json")
+    @ResponseBody
 	public ResponseEntity<?> deleteDepartement(@PathVariable("id") long id) {
-
 		Departement departement = departementDao.findById(id);
 		if (departement == null) {
 			return new ResponseEntity("Unable to delete. Departement with id " + id + " not found.",
 					HttpStatus.NOT_FOUND);
 		}
 		departementDao.deleteById(id);
-		return new ResponseEntity(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<Departement>(HttpStatus.NO_CONTENT);
 	}
 
+
 	
-	// Path : /departement/as/delete
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	@RequestMapping(value = "as/delete", method = RequestMethod.DELETE)
 	public ResponseEntity<Departement> deleteAllDepartements() {

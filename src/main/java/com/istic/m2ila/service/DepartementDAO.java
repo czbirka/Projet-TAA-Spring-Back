@@ -22,7 +22,7 @@ public interface DepartementDAO extends CrudRepository<Departement, Long>   {
 	Departement findById(@Param("id") long id);
 	
 	@Query("select d from Departement d where d.nom = :nom")
-	Departement findByNom(@Param("nom") String nom);
+	List<Departement> findByNom(@Param("nom") String nom);
 	
 	@Query("select d from Departement d where d.region.nom = :nomRegion")
 	List<Departement> findByRegion(@Param("nomRegion") String nomRegion);
@@ -34,9 +34,12 @@ public interface DepartementDAO extends CrudRepository<Departement, Long>   {
 	@Query("update Departement d set d.nom = :nom, d.region = :region where d.id = :id")
 	void setDepartementInfoById(@Param("id") long id, @Param("nom") String nom, @Param("region") Region region);
 
+//	@Transactional
+//    @Query("delete from Departement d where d.id = :id")
+//	void deleteById(@Param("id") long id);
+	
 	@Transactional
-    @Query("delete from Departement d where d.id = :id")
-	void deleteById(@Param("id") long id);
+    long deleteById(long id);
 	
 	@Transactional
     @Query("delete from Departement d")
