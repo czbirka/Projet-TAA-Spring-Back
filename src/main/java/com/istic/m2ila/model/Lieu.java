@@ -78,7 +78,7 @@ public class Lieu {
 	}
 
 	@ManyToOne
-	@JsonIgnore
+	//@JsonIgnore
 	public Departement getDepartement() {
 		return departement;
 	}

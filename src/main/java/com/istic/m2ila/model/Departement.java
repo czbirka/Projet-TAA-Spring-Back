@@ -40,7 +40,7 @@ public class Departement {
 	}
 
 	@ManyToOne
-	@JsonIgnore
+	//@JsonIgnore
 	public Region getRegion() {
 		return region;
 	}

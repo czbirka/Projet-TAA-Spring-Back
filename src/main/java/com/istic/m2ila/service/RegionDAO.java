@@ -10,18 +10,25 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.istic.m2ila.model.Region;
+import com.istic.m2ila.model.User;
 
 @Transactional
 public interface RegionDAO extends CrudRepository<Region, Long>  {
 
+	@Transactional
 	@Query("select r from Region r")
 	List<Region> findAll();
 	
+	@Transactional
 	@Query("select r from Region r where r.id = :id")
 	Region findById(@Param("id") long id);
 	
+//	@Query("select r from Region r where r.nom = :nom")
+//	Region findByNom(@Param("nom") String nom);
+	
+	@Transactional
 	@Query("select r from Region r where r.nom = :nom")
-	Region findByNom(@Param("nom") String nom);
+	List<Region> findByNom(@Param("nom") String nom);
 	
 	boolean existsById(long id);
 	

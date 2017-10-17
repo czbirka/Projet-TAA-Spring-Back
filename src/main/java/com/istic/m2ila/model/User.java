@@ -20,11 +20,15 @@ public class User {
 	private String nom;
 	private String prenom;
 	private String login;
-	private  transient String motDePasse;
+	private String motDePasse;
 	private String email;
 
 	private List<Activite> activites = new ArrayList<Activite>();
 
+	//public User(String nom) {
+	//	this.nom = nom;
+	//}
+	
 	@Id
 	@GeneratedValue
 	public long getId() {

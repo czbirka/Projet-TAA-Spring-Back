@@ -28,19 +28,20 @@ public interface UserDAO extends CrudRepository<User, Long> {
 	
 	@Transactional
 	@Query("select u from User u where u.login = :login")
-	User findByLogin(@Param("login") String login);
+	List<User> findByLogin(@Param("login") String login);
 
 	boolean existsById(long id);
+	
+	void delete(User user);
 
 	@Transactional
 	@Modifying
 	@Query("update User u set u.nom = :nom, u.prenom = :prenom, u.login = :login, u.motDePasse = :mdp, u.email = :email where u.id = :id")
 	void setUserInfoById(@Param("id") long id, @Param("nom") String nom, @Param("prenom") String prenom,
 			@Param("login") String login, @Param("mdp") String motDePasse, @Param("email") String email);
-	
+
 	@Transactional
-    @Query("delete from User u where u.id = :id")
-	void deleteById(@Param("id") long id);
+    long deleteById(long id);
 
 	@Transactional
     @Query("delete from User u")

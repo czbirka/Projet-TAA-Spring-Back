@@ -1,6 +1,8 @@
 package com.istic.m2ila.web;
 
 import java.util.List;
+import java.util.ListIterator;
+import java.util.logging.Logger;
 
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -12,8 +14,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.istic.m2ila.model.User;
 import com.istic.m2ila.service.UserDAO;
 
@@ -25,8 +29,8 @@ public class UserController {
 	private UserDAO userDao;
 
 	
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    @Produces(MediaType.APPLICATION_JSON)
+    @RequestMapping(value = "", method = RequestMethod.GET, produces="application/json")
+    @ResponseBody
     public ResponseEntity<List<User>> listAllUsers() {
         List<User> users = userDao.findAll();
         if (users.isEmpty()) {
@@ -35,8 +39,8 @@ public class UserController {
         return new ResponseEntity<List<User>>(users, HttpStatus.OK);
     }
 	
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    @Produces(MediaType.APPLICATION_JSON)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces="application/json")
+    @ResponseBody
     public ResponseEntity<?> getUser(@PathVariable("id") long id) {
         User user = userDao.findById(id);
         if (user == null) {
@@ -44,53 +48,112 @@ public class UserController {
         }
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
+
     
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    
+    @RequestMapping(
+    		value = "", 
+    		method = RequestMethod.POST, 
+    		produces="application/json", 
+    		consumes="application/json")
+    @ResponseBody
     public ResponseEntity<?> createUser(@RequestBody User user) {
-        if (userDao.existsById(user.getId())) {
-            return new ResponseEntity("Unable to create. A User with name " + 
-            user.getNom() + " already exist.",HttpStatus.CONFLICT);
-        }
+    	if (userDao.findByLogin(user.getLogin()).size() != 0) {
+            return new ResponseEntity("Unable to create. A User with login " + 
+            user.getLogin() + " already exist.",HttpStatus.CONFLICT);
+        }    	
         userDao.save(user);
         return new ResponseEntity<User>(user, HttpStatus.CREATED);
-    }
+    }  
     
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+  
+    
+    
+    @RequestMapping(
+    		value = "/{id}", 
+    		method = RequestMethod.PUT, 
+    		produces="application/json", 
+    		consumes="application/json")
+    @ResponseBody
     public ResponseEntity<?> updateUser(@PathVariable("id") long id, @RequestBody User user) {
- 
         User currentUser = userDao.findById(id);
- 
         if (currentUser == null) {
             return new ResponseEntity("Unable to upate. User with id " + id + " not found.", 
             		HttpStatus.NOT_FOUND);
         }
- 
-        currentUser.setNom(user.getNom());
-        currentUser.setPrenom(user.getPrenom());
-        currentUser.setLogin(user.getLogin());
-        currentUser.setMotDePasse(user.getMotDePasse());
-        currentUser.setEmail(user.getEmail());
-              
-        userDao.setUserInfoById(id, user.getNom(), user.getPrenom(), user.getLogin(), user.getMotDePasse(), user.getEmail());
+        if (user.getNom() != null) {currentUser.setNom(user.getNom());}
+        if (user.getPrenom() != null) {currentUser.setPrenom(user.getPrenom());}
+        if (user.getLogin() != null) {currentUser.setLogin(user.getLogin());}
+        if (user.getMotDePasse() != null) {currentUser.setMotDePasse(user.getMotDePasse());}
+        if (user.getEmail() != null) {currentUser.setEmail(user.getEmail());}
+        userDao.save(currentUser);
         return new ResponseEntity<User>(currentUser, HttpStatus.OK);
     }
     
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    
+    
+    
+    @RequestMapping(
+    		value = "/{id}", 
+    		method = RequestMethod.DELETE, 
+    		consumes="application/json")
+    @ResponseBody
     public ResponseEntity<?> deleteUser(@PathVariable("id") long id) {
- 
         User user = userDao.findById(id);
         if (user == null) {
-            return new ResponseEntity("Unable to delete. User with id " + id + " not found.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity("Unable to delete. U/ser with id " + id + " not found.", HttpStatus.NOT_FOUND);
         }
         userDao.deleteById(id);
         return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
     }
     
-    @RequestMapping(value = "/", method = RequestMethod.DELETE)
+    
+    
+    
+    
+    @RequestMapping(
+    		value = "/deleteAll", 
+    		method = RequestMethod.DELETE, 
+    		produces="application/json", 
+    		consumes="application/json")
+    @ResponseBody
     public ResponseEntity<User> deleteAllUsers() {
-    	userDao.deleteAllUsers();
+    	
+    	List<User> users = userDao.findAll();
+        if (users.isEmpty()) {
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }
+        
+        for (int i=0; i<users.size(); i++) {
+        	userDao.deleteById(users.get(i).getId());
+        }
+        
+        //userDao.deleteAll();
+        //ListIterator li = users.listIterator();
+
+
+        //while(li.hasNext())
+        	//userDao.deleteById(li.nex)
+        	
+          //System.out.println(li.next());
+    	
         return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
     }
+	
+    
+    
+    
+    
+//    @RequestMapping(
+//    		value = "/deleteAll", 
+//    		method = RequestMethod.DELETE, 
+//    		produces="application/json", 
+//    		consumes="application/json")
+//    @ResponseBody
+//    public ResponseEntity<User> deleteAllUsers() {
+//    	userDao.deleteAllUsers();
+//        return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
+//    }
 	
 	
 //	@RequestMapping(value = "/", method = RequestMethod.GET)
