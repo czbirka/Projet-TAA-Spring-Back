@@ -34,8 +34,7 @@ public interface LieuDAO extends JpaRepository<Lieu, Long> {
 			@Param("longitude") double longitude, @Param("departement") Departement departement);
 	
 	@Transactional
-    @Query("delete from Lieu l where l.id = :id")
-	void deleteById(@Param("id") long id);
+    long deleteById(long id);
 	
 	@Transactional
     @Query("delete from Lieu u")

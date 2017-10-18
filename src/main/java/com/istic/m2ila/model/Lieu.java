@@ -25,7 +25,10 @@ public class Lieu {
 
 	private Departement departement;
 	
-	public Lieu() {};
+	public Lieu() {
+		this.latitude = 99;
+		this.longitude = 99;
+	};
 	
 	public Lieu(String nom, double latitude, double longitude) {
 		this.nom = nom;
