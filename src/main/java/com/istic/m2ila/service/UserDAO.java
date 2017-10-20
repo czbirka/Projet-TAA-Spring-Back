@@ -46,5 +46,6 @@ public interface UserDAO extends CrudRepository<User, Long> {
 	@Transactional
     @Query("delete from User u")
 	void deleteAllUsers();
-	 
+
+	List<User> findByLoginAndMotDePasse(String login, String motDePasse);
 }

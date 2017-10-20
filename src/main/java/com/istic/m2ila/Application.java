@@ -1,37 +1,36 @@
 package com.istic.m2ila;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.istic.m2ila.model.User;
+import com.istic.m2ila.security.JwtFilter;
 
-
-//@RestController
-//@EnableAutoConfiguration
 @SpringBootApplication
-public class Application {
+public class Application  extends WebSecurityConfigurerAdapter {
     
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 		System.out.println("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
-		
-
-		
-		/*
-        Timer t = new Timer();
-        t.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                ApplicationTableModel tableModel = (ApplicationTableModel) view.getApplicationTableView().getModel();
-                tableModel.update();
-            }
-        }, 0, 5000);
-		*/
-		
-		
 	}
 	
+	 @Override
+	 public void configure (WebSecurity web) throws Exception {
+	 // Autoriser uniquement ces routes sans être identifié
+	 web.ignoring().antMatchers("/account/login", "/account/register");
+	 }
+	
+	 @Override
+	 protected void configure (HttpSecurity http) throws Exception {
+	 http
+	 .csrf()
+	 .disable();
+	
+	 http.addFilterBefore(new JwtFilter(),
+	 UsernamePasswordAuthenticationFilter.class);
+	
+	 }
 }
