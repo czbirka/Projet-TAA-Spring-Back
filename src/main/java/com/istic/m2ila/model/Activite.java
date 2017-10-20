@@ -56,7 +56,7 @@ public class Activite {
 	}
 	
 	@ManyToOne
-	@JsonIgnore
+	//@JsonIgnore
 	public User getUser() {
 		return user;
 	}
