@@ -14,7 +14,16 @@ public class Condition {
 	double tempSup;
 	double tempMax;
 	
-	public Condition() {}
+	public Condition() {
+		this.ventMin = -999;
+		this.ventInf = -999;
+		this.ventSup = 999;
+		this.ventMax = 999;
+		this.tempMin = -999;
+		this.tempInf = -999;
+		this.tempSup = 999;
+		this.tempMax = 999;
+	}
 	
 	public Condition(double vmin, double vinf, double vsup, double vmax, double tmin, double tinf, double tsup, double tmax) {
 		this.ventMin = vmin;

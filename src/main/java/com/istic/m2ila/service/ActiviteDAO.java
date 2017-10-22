@@ -14,13 +14,22 @@ import com.istic.m2ila.model.Condition;
 @Transactional
 public interface ActiviteDAO extends JpaRepository<Activite, Long>  {
 
+	@Transactional
 	@Query("select a from Activite a")
 	List<Activite> findAll();
 	
+	@Transactional
 	@Query("select a from Activite a where a.id = :id")
 	Activite findById(@Param("id") long id);
 	
+	@Transactional
 	boolean existsById(long id);
+	
+	@Transactional
+	@Query("select a from Activite a where a.nom = :nom")
+	List<Activite> findByName(@Param("nom") String nom);
+	
+
 	
 	@Transactional
 	@Modifying
@@ -29,8 +38,7 @@ public interface ActiviteDAO extends JpaRepository<Activite, Long>  {
 			@Param("condition") Condition condition);
 	
 	@Transactional
-    @Query("delete from Activite a where a.id = :id")
-	void deleteById(@Param("id") long id);
+    long deleteById(long id);
 	
 	@Transactional
     @Query("delete from Activite a")
