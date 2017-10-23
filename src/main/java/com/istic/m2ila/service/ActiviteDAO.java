@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.istic.m2ila.model.Activite;
 import com.istic.m2ila.model.Condition;
+import com.istic.m2ila.model.Lieu;
 
 @Transactional
 public interface ActiviteDAO extends JpaRepository<Activite, Long>  {
@@ -29,7 +30,9 @@ public interface ActiviteDAO extends JpaRepository<Activite, Long>  {
 	@Query("select a from Activite a where a.nom = :nom")
 	List<Activite> findByName(@Param("nom") String nom);
 	
-
+	@Transactional
+	@Query("select a.lieux from Activite a where a.id = :id")
+	List<Lieu> findLieuxById(@Param("id") long id);
 	
 	@Transactional
 	@Modifying

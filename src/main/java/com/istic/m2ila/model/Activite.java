@@ -48,7 +48,7 @@ public class Activite {
 	}
 	
 	@ManyToMany(cascade = CascadeType.ALL)
-	@JsonIgnore
+	//@JsonIgnore
 	public List<Lieu> getLieux() {
 		return lieux;
 	}
