@@ -29,27 +29,29 @@ public class ScheduledTasks {
 	@Autowired
 	private ActiviteDAO activiteDao;
 
-	@Scheduled(cron = "0 0 23 * * TUE")
+	@Scheduled(fixedRate = 5000)//pour test
+	//@Scheduled(cron = "0 0 23 * * TUE")
 	public void reportCurrentTime() {
 
-	}
-
-	@Scheduled(fixedRate = 5000)
-	public void test() {
-
+		/*
+		 * bilan hebdo regroupe les bilans de tous les users
+		 */
 		List<BilanUser> bilanHebdo = new ArrayList<>();
 
 		List<User> users = userDao.findAll();
 		List<Activite> activites = activiteDao.findAll();
 
-		
+		//on passe en revue tous les users
 		for (int i = 0; i < users.size(); i++) {
 
 			BilanUser bilanUser = new BilanUser();
 			
+			//liste des activités du User
 			List<Activite> activitesUser = new ArrayList<Activite>();
+			//liste des lieux sélectionnés par user
 			List<Lieu> lieuxUser = new ArrayList<Lieu>();
 
+			//construction de la liste des activités du user
 			for (int j = 0; j < activites.size(); j++) {
 				if (activites.get(j).getUser() != null) {
 					if ((activites.get(j).getUser().getId() == users.get(i).getId())
@@ -58,7 +60,9 @@ public class ScheduledTasks {
 					}
 				}
 			}
-
+			
+			
+			//construction de la liste des lieux sélectionnés par user
 			for (int j = 0; j < activitesUser.size(); j++) {
 
 				List<Lieu> lieuxActivite = activiteDao.findLieuxById(activites.get(j).getId());
@@ -69,21 +73,25 @@ public class ScheduledTasks {
 				}
 			}
 			
+			//si pas de lieu sélectionné: pas de bilan
 			if (lieuxUser.size() > 0) {
 				bilanUser.setUser(users.get(i));
 				bilanHebdo.add(bilanUser);
 			}
 
-			// recherche meteo lieu
+			// recherche donnees meteo pour chaque lieu
 			for (int j = 0; j < lieuxUser.size(); j++) {
-
+				
+				//bilan pour les activites du lieu pour samedi
 				BilanLieu bilanLieuSamedi = new BilanLieu();
+				//bilan pour les activites du lieu pour dimanche
 				BilanLieu bilanLieuDimanche = new BilanLieu();
 				bilanLieuSamedi.setLieu(lieuxUser.get(j));
 				bilanLieuDimanche.setLieu(lieuxUser.get(j));
 				bilanUser.getBilanSamedi().add(bilanLieuSamedi);
 				bilanUser.getBilanDimanche().add(bilanLieuDimanche);
 
+				//envoi de la requete vers le site openweathermap.org
 				String donneesMeteo = "";
 				try {
 					donneesMeteo = this.sendGET(lieuxUser.get(j).getLatitude(), lieuxUser.get(j).getLongitude());
@@ -91,6 +99,7 @@ public class ScheduledTasks {
 					e.printStackTrace();
 				}
 
+				//selection des donnees pour samedi 15h et dimanche 15h
 				if (!donneesMeteo.equals("")) {
 					// recherche temp et vent
 					int indexTemp = 0;
@@ -140,6 +149,10 @@ public class ScheduledTasks {
 								bilanActiviteD.setActivite(activitesUser.get(k));
 								bilanLieuDimanche.getBilansActivite().add(bilanActiviteD);
 								
+								//on affecte le resultat à chaque activite
+								//	OK : les prévisions de temp et de vent sont dans les limtes (inf et sup) optimales
+								//	BOF : une des prévisions est hors de limites optimales
+								//	NON : une des prévisions (vent ou temp) est hors des limites extemes (min et max)
 								bilanActiviteS.setResultat(resultatMeteo(bilanActiviteS.getActivite(), 
 										bilanLieuSamedi.getTemp(), bilanLieuSamedi.getVent()));
 								bilanActiviteD.setResultat(resultatMeteo(bilanActiviteD.getActivite(), 
