@@ -2,7 +2,6 @@ package com.istic.m2ila.service;
 
 import java.util.List;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -29,6 +28,10 @@ public interface UserDAO extends CrudRepository<User, Long> {
 	@Transactional
 	@Query("select u from User u where u.login = :login")
 	List<User> findByLogin(@Param("login") String login);
+	
+	@Transactional
+	@Query("select u from User u where u.email = :email")
+	List<User> findByEmail(@Param("email") String email);
 
 	boolean existsById(long id);
 	

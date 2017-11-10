@@ -30,7 +30,6 @@ public class AccountController {
 
         String jwtToken = "";
 
-
         if (!serv.validate(userparam)) {
             throw new ServletException("Please fill in username and password");
         }
@@ -49,19 +48,12 @@ public class AccountController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public User register(@RequestBody AccountCredentials userparam) throws ServletException {
-
-        if (!serv.validate(userparam)) {
-            throw new ServletException("Please fill in username and password");
-        }
-
+    public User register(@RequestBody User newUser) throws ServletException {
+    	
         try {
-            return serv.register(userparam);
+            return serv.register(newUser);
         }catch (Exception ex){
             throw new ServletException(ex.getMessage());
         }
-
-
-
     }
 }
