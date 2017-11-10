@@ -205,12 +205,12 @@ public class ScheduledTasks {
 		
 		int resultat = resTemp*resVent;
 		if (resultat == 4) {
-			return "OK";
+			return "5/5";
 		}
 		else if (resultat == 2) {
-			return "BOF";
+			return "3/5";
 		}
-		else return "NON";
+		else return "0/5";
 	}
 
 	private String sendGET(double latitude, double longitude) throws IOException {
