@@ -24,6 +24,10 @@ public interface LieuDAO extends JpaRepository<Lieu, Long> {
 	@Query("select l from User l where l.nom = :nom")
 	List<Lieu> findByNom(@Param("nom") String nom);
 	
+	@Transactional
+	@Query("select l from Lieu l where l.departement.code = :code")
+	List<Lieu> findByDepartement(@Param("code") String code);
+	
 	boolean existsById(long id);
 
 	@Transactional

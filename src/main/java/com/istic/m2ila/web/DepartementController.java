@@ -49,6 +49,20 @@ public class DepartementController {
 		return new ResponseEntity<Departement>(departement, HttpStatus.OK);
 	}
 	
+	@ResponseBody
+	@RequestMapping(
+			value = "region/{regionName}", 
+			method = RequestMethod.GET, 
+			produces="application/json")
+	public ResponseEntity<?> getDepartementsByRegion(@PathVariable("regionName") String regionName) {
+		List<Departement> departements = departementDao.findByRegion(regionName);
+		if (departements == null) {
+			return new ResponseEntity("Not found Departements with region " + regionName, HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<List<Departement>>(departements, HttpStatus.OK);
+
+	}
+	
 	@RequestMapping(
     		value = "", 
     		method = RequestMethod.POST, 
@@ -81,11 +95,6 @@ public class DepartementController {
 		departementDao.save(currentDepartement);
 		return new ResponseEntity<Departement>(currentDepartement, HttpStatus.OK);
 	}
-
-	
-	
-	
-	
 	
 	@RequestMapping(
     		value = "/{id}", 
@@ -101,18 +110,6 @@ public class DepartementController {
 		departementDao.deleteById(id);
 		return new ResponseEntity<Departement>(HttpStatus.NO_CONTENT);
 	}
-
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	@RequestMapping(value = "as/delete", method = RequestMethod.DELETE)
 	public ResponseEntity<Departement> deleteAllDepartements() {

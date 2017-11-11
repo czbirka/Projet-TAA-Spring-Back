@@ -42,6 +42,16 @@ public class LieuController {
 		}
 		return new ResponseEntity<Lieu>(lieu, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/departement/{code}", method = RequestMethod.GET, produces="application/json")
+    @ResponseBody
+	public ResponseEntity<List<Lieu>> getLieuxByDepartement(@PathVariable("code") String code) {
+		List<Lieu> lieux = lieuDao.findByDepartement(code);
+		if (lieux.isEmpty()) {
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<Lieu>>(lieux, HttpStatus.OK);
+	}
 
 	@ResponseBody
 	@RequestMapping(
@@ -78,10 +88,6 @@ public class LieuController {
 
 	}
 
-	
-
-	
-	
 	@ResponseBody
 	@RequestMapping(
     		value = "/{id}", 
@@ -97,26 +103,7 @@ public class LieuController {
 		return new ResponseEntity(HttpStatus.NO_CONTENT);
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	// Path : lieu/as/delete
-
 	@RequestMapping(value = "as/delete", method = RequestMethod.DELETE)
 	public ResponseEntity<Lieu> deleteAllLieux() {
 		lieuDao.deleteAllLieux();

@@ -33,7 +33,7 @@ public class AccountService {
 			throw new Exception("Ce login est déjà utilisé, veuillez en choisir un autre");
 		}
 		if (isEmailExist(newUser.getEmail())) {
-			throw new Exception("Ce login est déjà utilisé, veuillez en choisir un autre");
+			throw new Exception("Ce mail est déjà utilisé, veuillez en choisir un autre");
 		}
 		return userServ.save(newUser);
 	}
