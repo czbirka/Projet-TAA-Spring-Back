@@ -132,7 +132,7 @@ public class ScheduledTasks {
 							String ventString = donneesMeteo.substring(debutVent + 1, finVent);
 
 							bilanLieuDimanche.setTemp(Double.parseDouble(tempString));
-							bilanLieuDimanche.setVent(Double.parseDouble(ventString));
+							bilanLieuDimanche.setVent(3.6*(Double.parseDouble(ventString)));
 						}
 
 					}
