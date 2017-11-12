@@ -21,13 +21,13 @@ public class Application extends WebSecurityConfigurerAdapter {
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 		System.out.println("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
-		ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Mail.xml");
-
-		MailingService mm = new MailingService();
-		MailSender ms = (MailSender) context.getBean("mailSender");
-		mm.setMailSender(ms);
-		mm.sendMail("appweekend@gmail.com", "tolo1993@yopmail.com", "Testing Appweekend",
-				"Testing only \n\n Hello Appweekend Test");
+//		ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Mail.xml");
+//
+//		MailingService mm = new MailingService();
+//		MailSender ms = (MailSender) context.getBean("mailSender");
+//		mm.setMailSender(ms);
+//		mm.sendMail("appweekend@gmail.com", "tolo1993@yopmail.com", "Testing Appweekend",
+//				"Testing only \n\n Hello Appweekend Test");
 	}
 
 	@Override

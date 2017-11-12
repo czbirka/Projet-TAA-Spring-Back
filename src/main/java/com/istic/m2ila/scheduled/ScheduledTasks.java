@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.mail.MailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -171,13 +174,65 @@ public class ScheduledTasks {
 		
 		///////////////////////////////////////////////////////////////////////////////////////////////////
 		///////////////////////////////////////////////////////////////////////////////////////////////////
-		// Envoyer mails
-		//
-		// envoyerMails(bilanHebdo);
-		//
-		///////////////////////////////////////////////////////////////////////////////////////////////////
-		///////////////////////////////////////////////////////////////////////////////////////////////////
-
+		// Envoyer les mails 
+		sendMails(bilanHebdo);
+	}
+	
+	private void sendMails(List<BilanUser> bilans){
+		// Initialize mailSender config
+		ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Mail.xml");
+		MailingService mm = new MailingService();
+		MailSender ms = (MailSender) context.getBean("mailSender");
+		mm.setMailSender(ms);
+		
+		// init vars
+		String mail="";
+		String userMail="";
+		String bilanSamedi="";
+		String bilanDimanche="";
+		
+		// for each user
+		for (BilanUser bilanUser : bilans) {
+			//get mail
+			userMail = bilanUser.getUser().getEmail();
+			
+			//get saturday results
+			bilanSamedi = "- Bilan Samedi :\n";
+			
+			// for each city
+			for (BilanLieu bilanSam : bilanUser.getBilanSamedi()) {
+				//get city name
+				bilanSamedi +="\t * "+bilanSam.getLieu().getNom()+":\n";
+				
+				// for each activity
+				for (BilanActivite bilanActivity : bilanSam.getBilansActivite()) {
+					//get activity name and weather score
+					bilanSamedi +="\t\t * "+bilanActivity.getActivite().getNom()+":"+bilanActivity.getResultat();
+				}
+			}
+			
+			//get sunday results
+			bilanSamedi = "- Bilan Samedi :\n";
+			
+			// for each city
+			for (BilanLieu bilanDim : bilanUser.getBilanDimanche()) {
+				//get city name
+				bilanSamedi +="\t * "+bilanDim.getLieu().getNom()+":\n";
+				
+				// for each activity
+				for (BilanActivite bilanActivity : bilanDim.getBilansActivite()) {
+					//get activity name and weather score
+					bilanSamedi +="\t\t * "+bilanActivity.getActivite().getNom()+":"+bilanActivity.getResultat();
+				}
+			}
+			
+			//concatenate saturday and sunday results
+			mail = bilanSamedi + "\n" + bilanDimanche;
+			
+			//Send mail for user i
+			mm.sendMail("appweekend@gmail.com", userMail, "WeekEndApp : Bilan météo pur ce week-end", mail);
+			
+		}
 	}
 	
 	private String resultatMeteo(Activite activite, double temp, double vent) {
