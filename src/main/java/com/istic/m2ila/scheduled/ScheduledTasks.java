@@ -193,6 +193,7 @@ public class ScheduledTasks {
 		
 		// for each user
 		for (BilanUser bilanUser : bilans) {
+			
 			//get mail
 			userMail = bilanUser.getUser().getEmail();
 			
@@ -207,30 +208,34 @@ public class ScheduledTasks {
 				// for each activity
 				for (BilanActivite bilanActivity : bilanSam.getBilansActivite()) {
 					//get activity name and weather score
-					bilanSamedi +="\t\t * "+bilanActivity.getActivite().getNom()+":"+bilanActivity.getResultat();
+					bilanSamedi +="\t\t * "+bilanActivity.getActivite().getNom()+": "+bilanActivity.getResultat()+"\n";
 				}
 			}
 			
 			//get sunday results
-			bilanSamedi = "- Bilan Samedi :\n";
+			bilanDimanche = "- Bilan Dimanche :\n";
 			
 			// for each city
 			for (BilanLieu bilanDim : bilanUser.getBilanDimanche()) {
 				//get city name
-				bilanSamedi +="\t * "+bilanDim.getLieu().getNom()+":\n";
+				bilanDimanche +="\t * "+bilanDim.getLieu().getNom()+":\n";
 				
 				// for each activity
 				for (BilanActivite bilanActivity : bilanDim.getBilansActivite()) {
 					//get activity name and weather score
-					bilanSamedi +="\t\t * "+bilanActivity.getActivite().getNom()+":"+bilanActivity.getResultat();
+					bilanDimanche +="\t\t * "+bilanActivity.getActivite().getNom()+":"+bilanActivity.getResultat()+"\n";
 				}
 			}
 			
 			//concatenate saturday and sunday results
-			mail = bilanSamedi + "\n" + bilanDimanche;
+			mail = "\nBonjour,\n- Vous trouvez ci-joint les prévisions météo pour ce week-end :\n"
+					+bilanSamedi + "\n" + bilanDimanche;
 			
 			//Send mail for user i
 			mm.sendMail("appweekend@gmail.com", userMail, "WeekEndApp : Bilan météo pur ce week-end", mail);
+			System.out.println("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
+			System.out.println("Mail sent to :"+userMail);
+			System.out.println("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
 			
 		}
 	}
