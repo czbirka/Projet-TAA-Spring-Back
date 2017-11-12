@@ -32,8 +32,8 @@ public class ScheduledTasks {
 	@Autowired
 	private ActiviteDAO activiteDao;
 
-	@Scheduled(fixedRate = 5000)//pour test
-	//@Scheduled(cron = "0 0 23 * * TUE")
+	//@Scheduled(fixedRate = 5000)//pour test
+	@Scheduled(cron = "0 36 17 * * SUN")
 	public void reportCurrentTime() {
 
 		/*
@@ -228,11 +228,12 @@ public class ScheduledTasks {
 			}
 			
 			//concatenate saturday and sunday results
-			mail = "\nBonjour,\n- Vous trouvez ci-joint les prévisions météo pour ce week-end :\n"
-					+bilanSamedi + "\n" + bilanDimanche;
+			mail = "\nBonjour,\n\n Vous trouvez ci-joint les prévisions météo pour ce week-end :\n"
+					+bilanSamedi + "\n" + bilanDimanche
+					+"\n\n Cordialement,\n\n WeekEndApp Team.";
 			
 			//Send mail for user i
-			mm.sendMail("appweekend@gmail.com", userMail, "WeekEndApp : Bilan météo pur ce week-end", mail);
+			mm.sendMail("appweekend@gmail.com", userMail, "WeekEndApp : Bilan météo de ce week-end", mail);
 			System.out.println("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
 			System.out.println("Mail sent to :"+userMail);
 			System.out.println("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");

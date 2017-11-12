@@ -47,8 +47,8 @@
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
             <property name="hibernate.connection.password" value="root"/>
-            <!--<property name="hibernate.connection.url" value="jdbc:mysql://172.17.0.2:3306/projet_taa"/>-->
-            <property name="hibernate.connection.url" value="jdbc:mysql://localhost/projet_taa"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://172.17.0.2:3306/projet_taa"/>
+            <!--<property name="hibernate.connection.url" value="jdbc:mysql://localhost/projet_taa"/>-->
             <property name="hibernate.connection.username" value="root"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
             <property name="hibernate.c3p0.min_size" value="5"/>
