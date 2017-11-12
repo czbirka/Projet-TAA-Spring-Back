@@ -33,7 +33,7 @@ public class ScheduledTasks {
 	private ActiviteDAO activiteDao;
 
 	//@Scheduled(fixedRate = 5000)//pour test
-	@Scheduled(cron = "0 36 17 * * SUN")
+	@Scheduled(cron = "0 0 23 * * TUE")
 	public void reportCurrentTime() {
 
 		/*
