@@ -20,6 +20,10 @@ public interface ActiviteDAO extends JpaRepository<Activite, Long>  {
 	List<Activite> findAll();
 	
 	@Transactional
+	@Query("select a from Activite a where a.user.id = :Userid")
+	List<Activite> findActivitiesByUserId(@Param("Userid") long Userid);
+	
+	@Transactional
 	@Query("select a from Activite a where a.id = :id")
 	Activite findById(@Param("id") long id);
 	
