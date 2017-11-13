@@ -49,8 +49,8 @@ Faire un npm install && npm start.
 L'application démarrera sur le port 4200, comme mentionné plus haut.
 
 
-## II/ Scénario
-_____
+## II/ Scénario
+____
 
 Cette application suit le scénario dont les étapes sont décrites ci-dessous :
 
