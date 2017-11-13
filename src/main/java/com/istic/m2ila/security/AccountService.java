@@ -21,11 +21,11 @@ public class AccountService {
 	}
 
 	private boolean isLoginExist(String login) {
-		return userServ.findByLogin(login).size() > 0;
+		return userServ.findByLogin(login) != null;
 	}
 
 	private boolean isEmailExist(String email) {
-		return userServ.findByEmail(email).size() > 0;
+		return userServ.findByEmail(email) != null;
 	}
 	
 	public User register(User newUser) throws Exception {
