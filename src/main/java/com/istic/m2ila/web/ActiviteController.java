@@ -35,6 +35,19 @@ public class ActiviteController {
 		}
 		return new ResponseEntity<List<Activite>>(activites, HttpStatus.OK);
 	}
+	
+	@ResponseBody
+	@RequestMapping(
+			value = "/user/{id}", 
+			method = RequestMethod.GET, 
+			produces="application/json")
+	public ResponseEntity<List<Activite>> listActivitesByUser(@PathVariable("id") long id) {
+		List<Activite> activites = activiteDao.findActivitiesByUserId(id);
+		if (activites.isEmpty()) {
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<Activite>>(activites, HttpStatus.OK);
+	}
 
 	@ResponseBody
 	@RequestMapping(
