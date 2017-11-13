@@ -69,30 +69,30 @@ public class ActiviteController {
     		produces="application/json", 
     		consumes="application/json")
 	public ResponseEntity<?> createActivite(@RequestBody Activite activite) {
-		List<Activite> activites = activiteDao.findByName(activite.getNom());
-		if (activites.size()==0) {
+		//List<Activite> activites = activiteDao.findByName(activite.getNom());
+		//if (activites.size()==0) {
 			activiteDao.save(activite);
 			return new ResponseEntity<Activite>(activite, HttpStatus.CREATED);
-		}
-		else {
-			for (int i=0; i<activites.size(); i++) {
-				if (activite.getUser() == null) {
-					if (activites.get(i).getUser() == null) {
-						return new ResponseEntity("Unable to create. A Activite with name " 
-								+ activite.getNom() + " already exist.", HttpStatus.CONFLICT);
-					}
-				}
-				else {
-					if ((activites.get(i).getUser() != null) && 
-							(activites.get(i).getUser().getId() == activite.getUser().getId())) {
-						return new ResponseEntity("Unable to create. A Activite with name " 
-								+ activite.getNom() + " already exist.", HttpStatus.CONFLICT);
-					}
-				}
-			}
-		}
-		activiteDao.save(activite);
-		return new ResponseEntity<Activite>(activite, HttpStatus.CREATED);
+//		}
+//		else {
+//			for (int i=0; i<activites.size(); i++) {
+//				if (activite.getUser() == null) {
+//					if (activites.get(i).getUser() == null) {
+//						return new ResponseEntity("Unable to create. A Activite with name " 
+//								+ activite.getNom() + " already exist.", HttpStatus.CONFLICT);
+//					}
+//				}
+//				else {
+//					if ((activites.get(i).getUser() != null) && 
+//							(activites.get(i).getUser().getId() == activite.getUser().getId())) {
+//						return new ResponseEntity("Unable to create. A Activite with name " 
+//								+ activite.getNom() + " already exist.", HttpStatus.CONFLICT);
+//					}
+//				}
+//			}
+//		}
+//		activiteDao.save(activite);
+//		return new ResponseEntity<Activite>(activite, HttpStatus.CREATED);
 	}
 
 	@ResponseBody
