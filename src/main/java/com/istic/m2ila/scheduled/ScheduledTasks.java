@@ -46,6 +46,8 @@ public class ScheduledTasks {
 
 		//on passe en revue tous les users
 		for (int i = 0; i < users.size(); i++) {
+			
+			
 
 			BilanUser bilanUser = new BilanUser();
 			
@@ -72,6 +74,11 @@ public class ScheduledTasks {
 				for (int k = 0; k < lieuxActivite.size(); k++) {
 					if (!lieuxUser.contains(lieuxActivite.get(k))) {
 						lieuxUser.add(lieuxActivite.get(k));
+						
+						System.out.println("-------------------------------------");
+						System.out.println(lieuxActivite.get(k).getNom());
+						System.out.println("-------------------------------------");
+						
 					}
 				}
 			}
@@ -84,6 +91,11 @@ public class ScheduledTasks {
 
 			// recherche donnees meteo pour chaque lieu
 			for (int j = 0; j < lieuxUser.size(); j++) {
+				
+				
+				System.out.println(lieuxUser.get(j).getNom());
+				
+				
 				
 				//bilan pour les activites du lieu pour samedi
 				BilanLieu bilanLieuSamedi = new BilanLieu();
