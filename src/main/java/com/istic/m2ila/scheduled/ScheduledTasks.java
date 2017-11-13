@@ -32,8 +32,8 @@ public class ScheduledTasks {
 	@Autowired
 	private ActiviteDAO activiteDao;
 
-	@Scheduled(fixedRate = 5000)//pour test
-//	@Scheduled(cron = "0 0 23 * * TUE")
+	//@Scheduled(fixedRate = 5000)//pour test
+	@Scheduled(cron = "0 0 23 * * TUE")
 	public void reportCurrentTime() {
 
 		/*
