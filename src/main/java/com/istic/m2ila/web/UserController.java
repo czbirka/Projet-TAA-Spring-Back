@@ -45,6 +45,16 @@ public class UserController {
         }
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
+    
+    @RequestMapping(value = "login/{login}", method = RequestMethod.GET, produces="application/json")
+    @ResponseBody
+    public ResponseEntity<?> getUserByLogin(@PathVariable("login") String login) {
+        User user = userDao.findByLogin(login);
+        if (user == null) {
+            return new ResponseEntity("User with login " + login + " not found", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<User>(user, HttpStatus.OK);
+    }
 
     
     
@@ -55,9 +65,9 @@ public class UserController {
     		consumes="application/json")
     @ResponseBody
     public ResponseEntity<?> createUser(@RequestBody User user) {
-    	if (userDao.findByLogin(user.getLogin()).size() != 0) {
+    	if (userDao.findByLogin(user.getLogin()) != null) {
             return new ResponseEntity("Unable to create. A User with login " + 
-            user.getLogin() + " already exist.",HttpStatus.CONFLICT);
+            user.getLogin() + " already exists.",HttpStatus.CONFLICT);
         }    	
         userDao.save(user);
         return new ResponseEntity<User>(user, HttpStatus.CREATED);

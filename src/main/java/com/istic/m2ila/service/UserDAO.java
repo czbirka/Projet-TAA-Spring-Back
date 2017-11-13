@@ -27,11 +27,11 @@ public interface UserDAO extends CrudRepository<User, Long> {
 	
 	@Transactional
 	@Query("select u from User u where u.login = :login")
-	List<User> findByLogin(@Param("login") String login);
+	User findByLogin(@Param("login") String login);
 	
 	@Transactional
 	@Query("select u from User u where u.email = :email")
-	List<User> findByEmail(@Param("email") String email);
+	User findByEmail(@Param("email") String email);
 
 	boolean existsById(long id);
 	
